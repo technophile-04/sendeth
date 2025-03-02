@@ -65,6 +65,7 @@ export default function AddressPage({ params }: Props) {
           {isValidAddress ? (
             <>
               <div className="mb-8 p-6 bg-white rounded-2xl shadow-lg">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={`/api/og?address=${address}`}
                   alt={`QR Code for ${address}`}

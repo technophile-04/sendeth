@@ -127,6 +127,7 @@ export async function GET(request: Request) {
                 border: `4px solid ${colors.primary}`,
               }}
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img width="320" height="320" src={qrCodeData || "/placeholder.svg"} alt="QR Code" />
             </div>
             {/* Address Text */}
