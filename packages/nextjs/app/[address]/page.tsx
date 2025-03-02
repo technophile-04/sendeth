@@ -33,11 +33,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : `${baseUrl}/api/og?address=0x0000000000000000000000000000000000000000`;
 
   return {
+    metadataBase: new URL(baseUrl),
     title,
     description,
     openGraph: {
       title,
       description,
+      type: "website",
       images: [
         {
           url: ogImageUrl,
