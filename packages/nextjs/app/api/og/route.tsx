@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { blo } from "blo";
 import QRCode from "qrcode";
 import { isAddress } from "viem";
 
@@ -13,12 +14,18 @@ export async function GET(request: Request) {
       return new Response("Invalid Ethereum address format", { status: 400 });
     }
 
-    // Generate QR code
     const qrCodeData = await QRCode.toDataURL(`ethereum:${address}`, {
       errorCorrectionLevel: "H",
-      margin: 0,
+      margin: 1,
       width: 400,
+      color: {
+        dark: "#000000FF",
+        light: "#FFFFFFFF",
+      },
     });
+
+    // Get blockie avatar for the address
+    const blockieUrl = blo(address as `0x${string}`);
 
     // Theme colors
     const themes = {
@@ -115,21 +122,51 @@ export async function GET(request: Request) {
                 <path fill="#62688F" d="M0 212.32l127.96 75.638v-133.8z" />
               </svg>
             </div>
-            {/* QR Code */}
+
+            {/* QR Code with Blockie */}
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
-                padding: "32px",
+                padding: "12px",
                 background: theme === "dark" ? "#1F2937" : "white",
                 borderRadius: "24px",
                 boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
                 border: `4px solid ${colors.primary}`,
+                position: "relative",
               }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
+              {/* QR Code */}
               <img width="320" height="320" src={qrCodeData || "/placeholder.svg"} alt="QR Code" />
+
+              {/* Blockie Avatar Overlay */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "54%",
+                  left: "19%",
+                  transform: "translate(-50%, -50%)",
+                  width: "85px",
+                  height: "85px",
+                  borderRadius: "50%",
+                  overflow: "hidden",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <img
+                  src={blockieUrl || "/placeholder.svg"}
+                  width="100%"
+                  height="100%"
+                  alt="Blockie Avatar"
+                  style={{
+                    borderRadius: "50%",
+                  }}
+                />
+              </div>
             </div>
+
             {/* Address Text */}
             <div
               style={{
