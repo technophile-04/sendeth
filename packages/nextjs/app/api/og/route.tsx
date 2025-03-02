@@ -118,7 +118,7 @@ export async function GET(request: Request) {
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              padding: "60px",
+              padding: "55px",
               maxWidth: "90%",
               position: "relative",
             }}
@@ -137,8 +137,8 @@ export async function GET(request: Request) {
               }}
             >
               <svg
-                width="60"
-                height="96"
+                width="40"
+                height="76"
                 viewBox="0 0 256 417"
                 xmlns="http://www.w3.org/2000/svg"
                 preserveAspectRatio="xMidYMid"
@@ -166,17 +166,18 @@ export async function GET(request: Request) {
               }}
             >
               {/* QR Code */}
-              <img width="320" height="320" src={qrCodeData || "/placeholder.svg"} alt="QR Code" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img width="400" height="400" src={qrCodeData} alt="QR Code" />
 
               {/* Avatar Overlay */}
               <div
                 style={{
                   position: "absolute",
-                  top: "55%",
-                  left: "19%",
+                  top: "53%",
+                  left: "23.5%",
                   transform: "translate(-50%, -50%)",
-                  width: "85px",
-                  height: "85px",
+                  width: "95px",
+                  height: "95px",
                   borderRadius: "50%",
                   overflow: "hidden",
                   display: "flex",
@@ -184,6 +185,7 @@ export async function GET(request: Request) {
                   justifyContent: "center",
                 }}
               >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={finalAvatarUrl}
                   width="100%"
@@ -224,22 +226,6 @@ export async function GET(request: Request) {
               </svg>
               Scan to send ETH
             </div>
-          </div>
-
-          {/* Footer */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: "24px",
-              left: 0,
-              right: 0,
-              display: "flex",
-              justifyContent: "center",
-              fontSize: "18px",
-              color: colors.subtext,
-            }}
-          >
-            Made with ❤️ by Shiv
           </div>
         </div>
       ),
