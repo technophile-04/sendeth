@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import QRCode from "qrcode";
+import { isAddress } from "viem";
 
 export async function GET(request: Request) {
   try {
@@ -8,7 +9,7 @@ export async function GET(request: Request) {
     const theme = searchParams.get("theme") || "default"; // Optional theme parameter
 
     // Validate Ethereum address format
-    if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
+    if (!isAddress(address)) {
       return new Response("Invalid Ethereum address format", { status: 400 });
     }
 
@@ -16,7 +17,7 @@ export async function GET(request: Request) {
     const qrCodeData = await QRCode.toDataURL(`ethereum:${address}`, {
       errorCorrectionLevel: "H",
       margin: 0,
-      width: 300,
+      width: 400,
     });
 
     // Theme colors
@@ -119,14 +120,14 @@ export async function GET(request: Request) {
               style={{
                 display: "flex",
                 flexDirection: "column",
-                padding: "24px",
+                padding: "32px",
                 background: theme === "dark" ? "#1F2937" : "white",
                 borderRadius: "24px",
                 boxShadow: "0 8px 30px rgba(0,0,0,0.12)",
                 border: `4px solid ${colors.primary}`,
               }}
             >
-              <img width="240" height="240" src={qrCodeData || "/placeholder.svg"} alt="QR Code" />
+              <img width="320" height="320" src={qrCodeData || "/placeholder.svg"} alt="QR Code" />
             </div>
             {/* Address Text */}
             <div
@@ -171,7 +172,7 @@ export async function GET(request: Request) {
               color: colors.subtext,
             }}
           >
-            Made with ❤️ by Scaffold-ETH 2
+            Made with ❤️ by Shiv
           </div>
         </div>
       ),
