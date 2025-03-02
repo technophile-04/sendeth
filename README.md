@@ -1,23 +1,45 @@
-# 🏗 Scaffold-ETH 2
+# 🏗 SENETH - ENS-Aware Ethereum QR Code Generator
 
 <h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
+  <a href="https://seneth.vercel.app">Live Demo</a> |
 </h4>
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+🧪 An open-source tool for generating beautiful, shareable Ethereum address QR codes with ENS integration. Perfect for receiving crypto payments, sharing your wallet address, or displaying your ENS identity.
 
-⚙️ Built using NextJS, RainbowKit, Hardhat, Wagmi, Viem, and Typescript.
+⚙️ Built using NextJS, Viem, ENS resolution, and dynamic OG image generation.
 
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
+## ✨ Features
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+- 🖼️ **ENS-Aware OG Images**: Dynamically generates social media preview images with ENS names and avatars
+- 🔄 **ENS Resolution**: Automatically resolves ENS names to addresses and displays ENS avatars when available
+- 🎨 **Multiple Themes**: Choose from different visual themes for your QR code
+- 📱 **Mobile Friendly**: Responsive design works great on all devices
+- 🔗 **Shareable Links**: Generate links that can be shared on social media with beautiful previews
+- 🧩 **Blockie Fallbacks**: Uses Ethereum blockies as avatar fallbacks when ENS avatars aren't available
 
-## Requirements
+## 🖼️ OG Image Examples
+
+When you share a link from SENETH, it generates a beautiful preview image that includes:
+
+1. The ENS name (if available) or Ethereum address
+2. A scannable QR code linking to the Ethereum address
+3. The ENS avatar (if available) or a generated blockie avatar
+4. Theme customization options
+
+## 🚀 Getting Started
+
+To use SENETH, simply:
+
+1. Visit [https://seneth.vercel.app](https://seneth.vercel.app)
+2. Enter an Ethereum address or ENS name
+3. Choose your preferred theme
+4. Share the generated link or download the QR code
+
+## 🧑‍💻 Development
+
+This project is built on Scaffold-ETH 2, an open-source toolkit for building Ethereum dApps.
+
+### Requirements
 
 Before you begin, you need to install the following tools:
 
@@ -25,56 +47,52 @@ Before you begin, you need to install the following tools:
 - Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
 - [Git](https://git-scm.com/downloads)
 
-## Quickstart
+### Local Setup
 
-To get started with Scaffold-ETH 2, follow the steps below:
+1. Clone the repository:
 
-1. Install dependencies if it was skipped in CLI:
-
+```bash
+git clone https://github.com/technophile-04/seneth.git
+cd seneth
 ```
-cd my-dapp-example
+
+2. Install dependencies:
+
+```bash
 yarn install
 ```
 
-2. Run a local network in the first terminal:
+3. Start the development server:
 
-```
-yarn chain
-```
-
-This command starts a local Ethereum network using Hardhat. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `packages/hardhat/hardhat.config.ts`.
-
-3. On a second terminal, deploy the test contract:
-
-```
-yarn deploy
-```
-
-This command deploys a test smart contract to the local network. The contract is located in `packages/hardhat/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/hardhat/deploy` to deploy the contract to the network. You can also customize the deploy script.
-
-4. On a third terminal, start your NextJS app:
-
-```
+```bash
 yarn start
 ```
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+4. Visit your app on: `http://localhost:3000`
 
-Run smart contract test with `yarn hardhat:test`
+### Environment Variables
 
-- Edit your smart contracts in `packages/hardhat/contracts`
-- Edit your frontend homepage at `packages/nextjs/app/page.tsx`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
-- Edit your deployment scripts in `packages/hardhat/deploy`
+To enable ENS resolution, you'll need an Alchemy API key:
 
+```
+NEXT_PUBLIC_ALCHEMY_API_KEY=your_alchemy_api_key
+```
 
-## Documentation
+## 🧠 How It Works
 
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
+The OG image generation uses Next.js API routes with the following process:
 
-To know more about its features, check out our [website](https://scaffoldeth.io).
+1. Receives an Ethereum address and optional theme parameter
+2. Validates the address format
+3. Resolves ENS name and avatar using Viem and the Ethereum mainnet
+4. Generates a QR code pointing to the Ethereum address
+5. Combines all elements into a beautiful shareable image
+6. Falls back to blockie avatars when ENS avatars aren't available
 
-## Contributing to Scaffold-ETH 2
+## 🤝 Contributing
 
-We welcome contributions to Scaffold-ETH 2!
+Contributions are welcome! Feel free to open issues or submit pull requests.
 
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
