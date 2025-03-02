@@ -18,10 +18,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? `Send ETH to ${address.slice(0, 6)}...${address.slice(-4)}`
     : "Invalid Ethereum Address";
 
-  const description = isValidAddress
-    ? `Scan the QR code to send ETH directly to ${address}`
-    : "Please provide a valid Ethereum address";
-
   // Base URL - replace with your actual domain in production
   const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
     ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
@@ -35,10 +31,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     metadataBase: new URL(baseUrl),
     title,
-    description,
     openGraph: {
       title,
-      description,
       type: "website",
       images: [
         {
@@ -52,7 +46,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title,
-      description,
       images: [ogImageUrl],
     },
   };
