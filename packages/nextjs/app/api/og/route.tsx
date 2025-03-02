@@ -1,20 +1,31 @@
 import { ImageResponse } from "next/og";
 import { blo } from "blo";
 import QRCode from "qrcode";
-import { isAddress } from "viem";
+import { Address, createPublicClient, getAddress, http, isAddress } from "viem";
+import { mainnet } from "viem/chains";
+import { normalize } from "viem/ens";
+import { getAlchemyHttpUrl } from "~~/utils/scaffold-eth";
+
+const alchemyHttpUrl = getAlchemyHttpUrl(mainnet.id);
+const rpcUrl = alchemyHttpUrl;
+const publicClient = createPublicClient({
+  chain: mainnet,
+  transport: http(rpcUrl),
+});
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const address = searchParams.get("address") || "0x0000000000000000000000000000000000000000";
-    const theme = searchParams.get("theme") || "default"; // Optional theme parameter
+    const theme = searchParams.get("theme") || "default";
 
-    // Validate Ethereum address format
     if (!isAddress(address)) {
       return new Response("Invalid Ethereum address format", { status: 400 });
     }
 
-    const qrCodeData = await QRCode.toDataURL(`ethereum:${address}`, {
+    const checksumAddress = getAddress(address);
+
+    const qrCodeData = await QRCode.toDataURL(`ethereum:${checksumAddress}`, {
       errorCorrectionLevel: "H",
       margin: 1,
       width: 400,
@@ -24,8 +35,26 @@ export async function GET(request: Request) {
       },
     });
 
-    // Get blockie avatar for the address
-    const blockieUrl = blo(address as `0x${string}`);
+    let ensName = null;
+    try {
+      ensName = await publicClient.getEnsName({ address: checksumAddress as Address });
+    } catch (error) {
+      console.error("Error resolving ENS name:", error);
+    }
+
+    // Try to resolve ENS avatar if we have an ENS name
+    let avatarUrl = null;
+    if (ensName) {
+      try {
+        avatarUrl = await publicClient.getEnsAvatar({ name: normalize(ensName) });
+      } catch (error) {
+        console.error("Error resolving ENS avatar:", error);
+      }
+    }
+
+    // Fallback to blockie avatar if no ENS avatar
+    const blockieUrl = blo(checksumAddress as `0x${string}`);
+    const finalAvatarUrl = avatarUrl || blockieUrl;
 
     // Theme colors
     const themes = {
@@ -123,7 +152,7 @@ export async function GET(request: Request) {
               </svg>
             </div>
 
-            {/* QR Code with Blockie */}
+            {/* QR Code with Avatar */}
             <div
               style={{
                 display: "flex",
@@ -139,11 +168,11 @@ export async function GET(request: Request) {
               {/* QR Code */}
               <img width="320" height="320" src={qrCodeData || "/placeholder.svg"} alt="QR Code" />
 
-              {/* Blockie Avatar Overlay */}
+              {/* Avatar Overlay */}
               <div
                 style={{
                   position: "absolute",
-                  top: "54%",
+                  top: "55%",
                   left: "19%",
                   transform: "translate(-50%, -50%)",
                   width: "85px",
@@ -156,10 +185,10 @@ export async function GET(request: Request) {
                 }}
               >
                 <img
-                  src={blockieUrl || "/placeholder.svg"}
+                  src={finalAvatarUrl}
                   width="100%"
                   height="100%"
-                  alt="Blockie Avatar"
+                  alt="Avatar"
                   style={{
                     borderRadius: "50%",
                   }}
@@ -167,7 +196,7 @@ export async function GET(request: Request) {
               </div>
             </div>
 
-            {/* Address Text */}
+            {/* Address or ENS Name Text */}
             <div
               style={{
                 marginTop: "32px",
@@ -177,7 +206,7 @@ export async function GET(request: Request) {
                 textAlign: "center",
               }}
             >
-              {`${address.slice(0, 6)}...${address.slice(-6)}`}
+              {ensName || `${checksumAddress.slice(0, 6)}...${checksumAddress.slice(-6)}`}
             </div>
             <div
               style={{
